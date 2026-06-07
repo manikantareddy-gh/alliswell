@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>All Is Well — LeetCode Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@300;400;500;700&family=Google+Sans+Display:wght@400;700&family=Google+Sans+Mono&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#07070e;--bg2:#0d0d18;--bg3:#111120;
+  --surface:#141428;--surface2:#1a1a32;--surface3:#20203c;
+  --border:rgba(160,140,255,0.08);--border2:rgba(160,140,255,0.18);
+  --text:#ededf8;--text2:#9898bb;--text3:#55556a;
+  --accent:#9f87ff;--accent2:#c4b5fd;--adim:rgba(159,135,255,0.12);
+  --easy:#4ade80;--ebg:rgba(74,222,128,0.09);
+  --medium:#fbbf24;--mbg:rgba(251,191,36,0.09);
+  --hard:#f87171;--hbg:rgba(248,113,113,0.09);
+  --blue:#67e8f9;--green:#6ee7b7;
+  --font:'Nunito',sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;overflow-x:hidden;-webkit-user-select:none;user-select:none}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:0.6}
+.orb{position:fixed;border-radius:50%;filter:blur(110px);pointer-events:none;z-index:0}
+.o1{width:550px;height:550px;background:radial-gradient(circle,#3b1f8c,transparent 70%);top:-180px;left:-180px;opacity:.5}
+.o2{width:450px;height:450px;background:radial-gradient(circle,#1a0a5e,transparent 70%);bottom:-120px;right:-120px;opacity:.4}
+.o3{width:280px;height:280px;background:radial-gradient(circle,#0f1a5e,transparent 70%);top:45%;left:58%;opacity:.3}
+.shell{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:0 22px 100px}
+
+/* ── Hero ── */
+.hero{padding:54px 0 38px;text-align:center}
+.eyebrow{font-family:var(--font-mono);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:16px;opacity:.8}
+.title{font-family:var(--font);font-size:clamp(46px,7vw,80px);font-weight:800;line-height:1;letter-spacing:-1.5px;margin-bottom:7px}
+.title em{font-style:italic;color:var(--accent2);font-weight:700}
+.tagline{font-family:var(--font);font-size:14px;font-weight:300;color:var(--text3);margin-bottom:20px;letter-spacing:0.3px}
+.hdiv{width:56px;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);margin:20px auto}
+.motto{display:inline-block;background:var(--adim);border:1px solid var(--border2);border-radius:40px;padding:9px 22px;font-size:13px;color:var(--accent2);font-weight:500}
+.motto::before{content:'"';opacity:.6;margin-right:3px}
+.motto::after{content:'"';opacity:.6;margin-left:3px}
+
+/* ── Status bar ── */
+.status-bar{display:flex;align-items:center;gap:9px;background:rgba(74,222,128,0.05);border:1px solid rgba(74,222,128,0.12);border-radius:10px;padding:9px 14px;margin-bottom:14px;font-size:12px;color:var(--text2);transition:all .3s}
+.status-bar.serr{background:rgba(248,113,113,0.05);border-color:rgba(248,113,113,0.2)}
+.sdot{width:7px;height:7px;border-radius:50%;background:#fbbf24;box-shadow:0 0 8px #fbbf24;flex-shrink:0;transition:all .3s;animation:blink 1.2s infinite}
+.sdot.ok{background:#4ade80;box-shadow:0 0 8px #4ade80;animation:pulse 2.5s infinite}
+.sdot.err{background:#f87171;box-shadow:0 0 8px #f87171;animation:none}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.5}}
+.stext{flex:1;font-family:var(--font-mono);font-size:11px}
+
+/* ── Toolbar ── */
+.toolbar{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;align-items:center}
+.tbtn{font-family:var(--font-mono);font-size:11px;padding:7px 14px;border-radius:8px;border:1px solid var(--border2);background:var(--surface);color:var(--text2);cursor:pointer;transition:all .18s;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.tbtn:hover{border-color:var(--accent);color:var(--accent);background:var(--adim)}
+.tbtn.primary{border-color:var(--accent);color:var(--accent);background:var(--adim)}
+.ai-add-btn{font-family:var(--font);font-size:12px;font-weight:700;padding:8px 16px;border-radius:20px;border:none;background:linear-gradient(135deg,#7c5af0,#c084fc);color:#fff;cursor:pointer;display:flex;align-items:center;gap:6px;box-shadow:0 0 20px rgba(124,90,240,.35);transition:all .2s;white-space:nowrap}
+.ai-add-btn:hover{transform:translateY(-1px);box-shadow:0 4px 24px rgba(124,90,240,.5)}
+.ai-add-btn svg{width:16px;height:16px;flex-shrink:0}
+
+/* ── Tabs ── */
+.tabs-wrap{display:flex;gap:6px;margin-bottom:22px;border-bottom:1px solid var(--border);flex-wrap:wrap;align-items:flex-end}
+.tab{font-family:var(--font);font-size:13px;font-weight:600;padding:9px 20px;border:none;background:none;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s;border-radius:6px 6px 0 0;display:flex;align-items:center;gap:7px;white-space:nowrap}
+.tab:hover{color:var(--text2)}
+.tab.active{color:var(--accent2);border-bottom-color:var(--accent)}
+.tab-pill{font-family:var(--font-mono);font-size:10px;padding:2px 6px;border-radius:8px;background:var(--surface2);color:var(--text3)}
+.tab.active .tab-pill{background:var(--adim);color:var(--accent2)}
+.add-topic-btn{font-family:var(--font-mono);font-size:11px;padding:6px 12px;border-radius:7px;border:1px dashed var(--border2);background:none;color:var(--text3);cursor:pointer;margin-bottom:4px;transition:all .18s;white-space:nowrap}
+.add-topic-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ── Search ── */
+.search-wrap{position:relative;margin-bottom:18px}
+.sico{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:15px;pointer-events:none}
+.search-input{width:100%;background:var(--surface);border:1px solid var(--border2);border-radius:11px;padding:11px 14px 11px 38px;font-size:14px;color:var(--text);font-family:var(--font);outline:none;transition:border-color .2s,box-shadow .2s;font-weight:500}
+.search-input::placeholder{color:var(--text3)}
+.search-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(159,135,255,.1)}
+
+/* ── Approach section ── */
+.approach{margin-bottom:8px;border:1px solid var(--border);border-radius:15px;overflow:hidden;background:var(--surface);transition:border-color .2s;animation:up .3s ease both}
+.approach:hover{border-color:var(--border2)}
+@keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.ah{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;cursor:pointer;user-select:none;transition:background .18s;gap:10px}
+.ah:hover{background:var(--surface2)}
+.ah-l{display:flex;align-items:center;gap:11px;flex:1;min-width:0}
+.ah-bar{width:3px;height:26px;border-radius:3px;flex-shrink:0}
+.ah-name{font-size:14px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ah-cnt{font-family:var(--font-mono);font-size:10px;padding:2px 7px;border-radius:5px;background:var(--surface3);color:var(--text3);border:1px solid var(--border);flex-shrink:0}
+.ah-r{display:flex;align-items:center;gap:7px;flex-shrink:0}
+.dpills{display:flex;gap:3px}
+.dp{font-family:var(--font-mono);font-size:9px;padding:2px 6px;border-radius:4px;font-weight:500}
+.de{background:var(--ebg);color:var(--easy)}.dm{background:var(--mbg);color:var(--medium)}.dh{background:var(--hbg);color:var(--hard)}
+.chev{color:var(--text3);font-size:11px;transition:transform .22s;flex-shrink:0}
+.chev.open{transform:rotate(180deg)}
+.icon-btn{font-size:13px;background:none;border:none;cursor:pointer;color:var(--text3);padding:3px 5px;border-radius:5px;transition:all .15s;line-height:1;flex-shrink:0}
+.icon-btn:hover{color:var(--accent);background:var(--adim)}
+
+/* ── Problem list & Dynamic Backgrounds ── */
+.plist{display:none}.plist.open{display:block}
+.prob{border-top:1px solid var(--border);transition:background .2s ease;cursor:pointer;position:relative}
+.prob:hover {background:var(--surface2)}
+
+/* Status Row Color Tints */
+.prob.st-solved{background:rgba(74,222,128,0.04)}
+.prob.st-improve{background:rgba(251,191,36,0.04)}
+.prob.st-weak{background:rgba(248,113,113,0.04)}
+.prob.st-skip{background:rgba(159,135,255,0.04)}
+
+.prob-main{padding:12px 18px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.prob-num{font-family:var(--font-mono);font-size:11px;color:var(--text3);min-width:34px;flex-shrink:0}
+.prob-body{flex:1;min-width:160px}
+.prob-name{font-size:14px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:7px;flex-wrap:wrap;line-height:1.35}
+.prob-name-text{transition:color .15s}
+.dbadge{font-family:var(--font-mono);font-size:9px;padding:2px 7px;border-radius:4px;flex-shrink:0;font-weight:500}
+.dE{background:var(--ebg);color:var(--easy);border:1px solid rgba(74,222,128,.15)}
+.dM{background:var(--mbg);color:var(--medium);border:1px solid rgba(251,191,36,.15)}
+.dH{background:var(--hbg);color:var(--hard);border:1px solid rgba(248,113,113,.15)}
+.prob-link{font-family:var(--font-mono);font-size:10px;color:var(--text3);text-decoration:none;margin-top:3px;display:inline-block;transition:color .14s}
+.prob-link:hover{color:var(--accent)}
+.dot{width:5px;height:5px;border-radius:50%;display:none;flex-shrink:0}
+.dotc{background:var(--blue);box-shadow:0 0 5px var(--blue)}
+.dotn{background:var(--green);box-shadow:0 0 5px var(--green)}
+.prob-actions{display:flex;gap:5px;flex-shrink:0;flex-wrap:wrap;align-items:center}
+.abtn{font-family:var(--font-mono);font-size:11px;padding:5px 11px;border-radius:7px;border:1px solid var(--border2);background:var(--surface2);color:var(--text2);cursor:pointer;transition:all .14s;display:flex;align-items:center;gap:4px;white-space:nowrap}
+.abtn:hover{border-color:var(--accent);color:var(--accent);background:var(--adim)}
+.abtn.has-code{border-color:rgba(103,232,249,.35);color:var(--blue);background:rgba(103,232,249,.07)}
+.abtn.has-note{border-color:rgba(110,231,183,.35);color:var(--green);background:rgba(110,231,183,.07)}
+.rev-wrap{display:flex;align-items:center;border:1px solid rgba(159,135,255,.25);border-radius:7px;overflow:hidden;background:rgba(159,135,255,.06);flex-shrink:0}
+.rev-label{font-family:var(--font-mono);font-size:10px;color:var(--accent2);padding:0 7px;white-space:nowrap;border-right:1px solid rgba(159,135,255,.2);height:100%;display:flex;align-items:center}
+.rev-input{font-family:var(--font-mono);font-size:12px;font-weight:600;color:var(--accent2);background:none;border:none;outline:none;width:36px;text-align:center;padding:5px 4px;cursor:text}
+.rev-input::-webkit-inner-spin-button,.rev-input::-webkit-outer-spin-button{-webkit-appearance:none}
+.rev-inc{font-family:var(--font-mono);font-size:13px;background:none;border:none;border-left:1px solid rgba(159,135,255,.2);color:var(--accent2);cursor:pointer;padding:4px 8px;transition:all .14s;line-height:1}
+.rev-inc:hover{background:rgba(159,135,255,.18);color:#fff}
+
+/* Status Labels */
+.lp-status-badge{font-family:var(--font-mono);font-size:10px;padding:2px 6px;border-radius:4px;margin-left:6px;font-weight:700}
+.lps-solved{color:var(--easy);background:rgba(74,222,128,0.12)}
+.lps-improve{color:var(--medium);background:rgba(251,191,36,0.12)}
+.lps-weak{color:var(--hard);background:rgba(248,113,113,0.12)}
+.lps-skip{color:var(--accent2);background:rgba(159,135,255,0.12)}
+
+/* ── Panels ── */
+.panel{display:none;border-top:1px solid var(--border);padding:15px 18px;background:var(--bg2)}
+.panel.open{display:block}
+.plbl{font-family:var(--font-mono);font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--text3);margin-bottom:9px}
+.panel textarea{width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:9px;padding:11px 13px;font-family:var(--font-mono);font-size:13px;color:var(--text);resize:vertical;min-height:130px;outline:none;line-height:1.65;transition:border-color .18s}
+.panel.note-panel textarea{font-family:var(--font);font-size:13px;min-height:85px}
+.panel textarea:focus{border-color:var(--accent)}
+.pfooter{display:flex;align-items:center;gap:9px;margin-top:9px;flex-wrap:wrap}
+.save-btn{font-family:var(--font-mono);font-size:11px;padding:6px 15px;border-radius:6px;border:1px solid var(--border2);background:var(--surface2);color:var(--text2);cursor:pointer;transition:all .14s}
+.save-btn:hover{border-color:var(--accent);color:var(--accent)}
+.flash-saving{font-family:var(--font-mono);font-size:11px;color:#fbbf24;display:none}
+.flash-saved{font-family:var(--font-mono);font-size:11px;color:#4ade80;opacity:0;transition:opacity .3s}
+.flash-saved.show{opacity:1}
+
+/* ── Description panel ── */
+.desc-panel{display:none;border-top:1px solid var(--border);background:var(--bg2)}
+.desc-panel.open{display:block}
+.desc-loading{padding:24px 18px;display:flex;align-items:center;gap:12px;color:var(--text3);font-size:13px}
+.desc-spinner{width:18px;height:18px;border:2px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+.desc-content{padding:20px 18px}
+.desc-title-row{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.desc-prob-num{font-family:var(--font-mono);font-size:11px;color:var(--text3)}
+.desc-prob-title{font-family:var(--font);font-size:18px;font-weight:700;color:var(--text)}
+.desc-section{margin-bottom:18px}
+.desc-section-lbl{font-family:var(--font-mono);font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--text3);margin-bottom:10px}
+.desc-text{font-size:14px;color:var(--text2);line-height:1.7;font-weight:400}
+.desc-text p{margin-bottom:8px}
+.desc-text code{font-family:var(--font-mono);font-size:12px;background:var(--surface3);padding:2px 6px;border-radius:4px;color:var(--accent2)}
+.io-blocks{display:flex;flex-direction:column;gap:12px}
+.io-block{border:1px solid var(--border2);border-radius:10px;overflow:hidden;opacity:0;transform:translateY(8px);transition:opacity .4s ease,transform .4s ease}
+.io-block.visible{opacity:1;transform:translateY(0)}
+.io-header{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--surface2);font-family:var(--font-mono);font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:1.5px}
+.io-header .io-tag{font-size:10px;padding:2px 8px;border-radius:4px;font-weight:600}
+.io-body{padding:10px 12px;font-family:var(--font-mono);font-size:12px;color:var(--text);background:var(--bg3);line-height:1.6}
+.io-explain{padding:8px 12px;font-size:12px;color:var(--text2);background:var(--surface);border-top:1px solid var(--border);font-style:italic}
+.desc-constraints{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-family:var(--font-mono);font-size:12px;color:var(--text2);line-height:1.8}
+.desc-constraints li{list-style:none;padding-left:0}
+.desc-constraints li::before{content:'→ ';color:var(--accent);opacity:.6}
+.desc-actions-row{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.desc-link-btn{font-family:var(--font);font-size:12px;font-weight:600;padding:8px 16px;border-radius:8px;border:1px solid var(--border2);background:var(--surface2);color:var(--text2);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:all .15s}
+.desc-link-btn:hover{border-color:var(--accent);color:var(--accent)}
+.desc-err{padding:20px 18px;color:#f87171;font-size:13px;font-style:italic;background:rgba(248,113,113,0.05);border:1px dashed rgba(248,113,113,0.2);border-radius:8px}
+
+/* ── Add problem row ── */
+.add-prob-row{border-top:1px solid var(--border);padding:10px 18px}
+.add-form{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.add-form input,.add-form select{font-family:var(--font);font-size:13px;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:7px 10px;color:var(--text);outline:none;transition:border-color .18s}
+.add-form input:focus,.add-form select:focus{border-color:var(--accent)}
+.add-form input.inp-num{width:90px}
+.add-form input.inp-name{flex:1;min-width:160px}
+.add-form input.inp-url{flex:1;min-width:160px}
+.add-form select{width:100px}
+.add-form .go-btn{font-family:var(--font-mono);font-size:11px;padding:7px 14px;border-radius:8px;border:1px solid rgba(159,135,255,.3);background:var(--adim);color:var(--accent);cursor:pointer;transition:all .15s;white-space:nowrap}
+.add-form .go-btn:hover{background:rgba(159,135,255,.2);border-color:var(--accent)}
+
+/* ── Overlays & Modals ── */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px)}
+.overlay.hidden{display:none}
+.modal{background:var(--surface);border:1px solid var(--border2);border-radius:18px;padding:28px;width:90%;max-width:480px;position:relative;animation:mup .25s ease}
+@keyframes mup{from{opacity:0;transform:translateY(16px) scale(.97)}to{opacity:1;transform:none}}
+.modal h2{font-family:var(--font);font-size:20px;font-weight:700;margin-bottom:20px;color:var(--text)}
+.modal p{font-size:13px;color:var(--text2);margin-bottom:14px;line-height:1.5}
+.modal label{display:block;font-size:11px;color:var(--text3);font-family:var(--font-mono);margin-bottom:5px;text-transform:uppercase;letter-spacing:1px}
+.modal input,.modal select,.modal textarea{width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:10px 12px;font-family:var(--font);font-size:14px;color:var(--text);outline:none;transition:border-color .18s;margin-bottom:14px}
+.modal input:focus,.modal select:focus,.modal textarea:focus{border-color:var(--accent)}
+.modal textarea{min-height:140px;font-family:var(--font-mono);font-size:12px;resize:vertical}
+.modal-footer{display:flex;gap:8px;justify-content:flex-end;margin-top:6px}
+.mbtn{font-family:var(--font);font-size:12px;font-weight:600;padding:8px 18px;border-radius:8px;cursor:pointer;transition:all .15s}
+.mbtn.cancel{border:1px solid var(--border2);background:none;color:var(--text2)}
+.mbtn.cancel:hover{border-color:var(--text3)}
+.mbtn.confirm{border:1px solid var(--accent);background:var(--adim);color:var(--accent)}
+.mbtn.confirm:hover{background:rgba(159,135,255,.2)}
+.close-modal{position:absolute;top:14px;right:16px;background:none;border:none;color:var(--text3);font-size:18px;cursor:pointer;transition:color .15s}
+.close-modal:hover{color:var(--text)}
+
+/* ── Actions Dropdown Grid ── */
+.lp-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.lp-opt{padding:12px;border-radius:8px;border:1px solid var(--border2);background:var(--bg3);cursor:pointer;text-align:center;font-size:13px;font-weight:600;transition:all .15s}
+.lp-opt:hover{border-color:var(--accent);background:var(--surface2)}
+
+/* ── AI Add Modal ── */
+.ai-modal{max-width:500px}
+.ai-modal h2{background:linear-gradient(135deg,#a78bfa,#c084fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:flex;align-items:center;gap:8px}
+.ai-modal h2::before{content:'✦';font-size:16px;background:linear-gradient(135deg,#a78bfa,#c084fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.ai-result-box{background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:14px;margin-bottom:14px;display:none}
+.ai-result-box.show{display:block}
+.ai-result-box .ar-name{font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px}
+.ai-result-box .ar-meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+.ai-result-box .ar-url{font-family:var(--font-mono);font-size:11px;color:var(--text3)}
+.ai-thinking{display:none;align-items:center;gap:10px;padding:12px;background:var(--surface2);border-radius:10px;margin-bottom:14px;font-size:13px;color:var(--text2)}
+.ai-thinking.show{display:flex}
+.ai-err{font-size:12px;color:#f87171;padding:10px 14px;margin-bottom:14px;background:rgba(248,113,113,0.06);border:1px solid rgba(248,113,113,0.2);border-radius:8px;line-height:1.4;display:none}
+.ai-err.show{display:block}
+.no-res{display:none;text-align:center;padding:50px 20px;color:var(--text3);font-size:14px}
+
+footer{text-align:center;padding-top:36px;border-top:1px solid var(--border);margin-top:36px}
+footer .f-friends{font-family:var(--font);font-size:14px;font-weight:600;color:var(--accent2);margin-bottom:8px}
+footer .f-copy{font-family:var(--font-mono);font-size:11px;color:var(--text3)}
+@media(max-width:600px){.prob-actions{width:100%}.title{font-size:42px}.dpills{display:none}}
+</style>
+</head>
+<body>
+<div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>
+
+<div id="toast-container" style="position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:10px;pointer-events:none;max-width:320px;"></div>
+
+<div class="overlay hidden" id="modal-lp-prob">
+  <div class="modal">
+    <button class="close-modal" onclick="closeModal('modal-lp-prob')">✕</button>
+    <h2 id="lp-prob-title">Manage Problem</h2>
+    <p>Select a status to update, or remove this problem completely.</p>
+    <div class="lp-grid">
+      <div class="lp-opt" onclick="triggerLpStatus('')">Reset Status</div>
+      <div class="lp-opt" style="color:var(--easy)" onclick="triggerLpStatus('solved')">✅ Solved</div>
+      <div class="lp-opt" style="color:var(--medium)" onclick="triggerLpStatus('improve')">📈 Need to Improve</div>
+      <div class="lp-opt" style="color:var(--hard)" onclick="triggerLpStatus('weak')">❌ Not Up To Mark</div>
+      <div class="lp-opt" style="color:var(--accent2)" onclick="triggerLpStatus('skip')">⏭ Skipped</div>
+    </div>
+    <div class="modal-footer" style="border-top:1px solid var(--border); padding-top:12px;">
+      <button class="mbtn confirm" style="background:rgba(248,113,113,0.1); border-color:#f87171; color:#f87171; margin-right:auto;" onclick="triggerLpDeleteProb()">🗑 Delete Problem</button>
+      <button class="mbtn cancel" onclick="closeModal('modal-lp-prob')">Close</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay hidden" id="modal-lp-approach">
+  <div class="modal">
+    <button class="close-modal" onclick="closeModal('modal-lp-approach')">✕</button>
+    <h2>Modify Approach</h2>
+    <label>Approach Name</label>
+    <input type="text" id="lp-ap-name" />
+    <label>Color</label>
+    <input type="color" id="lp-ap-color" style="height:42px;padding:4px 8px;cursor:pointer"/>
+    <div class="modal-footer">
+      <button class="mbtn confirm" style="background:rgba(248,113,113,0.1); border-color:#f87171; color:#f87171; margin-right:auto;" onclick="triggerLpDeleteAp()">🗑 Delete Entire Approach</button>
+      <button class="mbtn cancel" onclick="closeModal('modal-lp-approach')">Cancel</button>
+      <button class="mbtn confirm" onclick="triggerLpSaveAp()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay hidden" id="modal-topic">
+  <div class="modal">
+    <button class="close-modal" onclick="closeModal('modal-topic')">✕</button>
+    <h2>Add new topic</h2>
+    <label>Topic name</label>
+    <input type="text" id="new-topic-name" placeholder="e.g. String, Tree, Graph..."/>
+    <div class="modal-footer">
+      <button class="mbtn cancel" onclick="closeModal('modal-topic')">Cancel</button>
+      <button class="mbtn confirm" onclick="confirmAddTopic()">Add topic</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay hidden" id="modal-approach">
+  <div class="modal">
+    <button class="close-modal" onclick="closeModal('modal-approach')">✕</button>
+    <h2>Add new approach</h2>
+    <label>Approach name</label>
+    <input type="text" id="new-approach-name" placeholder="e.g. Dynamic Programming, Stack..."/>
+    <label>Color</label>
+    <input type="color" id="new-approach-color" value="#9f87ff" style="height:42px;padding:4px 8px;cursor:pointer"/>
+    <div class="modal-footer">
+      <button class="mbtn cancel" onclick="closeModal('modal-approach')">Cancel</button>
+      <button class="mbtn confirm" onclick="confirmAddApproach()">Add approach</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay hidden" id="modal-import">
+  <div class="modal" style="max-width:560px">
+    <button class="close-modal" onclick="closeModal('modal-import')">✕</button>
+    <h2>Import data</h2>
+    <label>Paste JSON below</label>
+    <textarea id="import-json" placeholder='[{"topic":"array","approach":"XOR","color":"#818cf8","problems":[{"num":136,"name":"Single Number","diff":"Easy","url":"..."}]}]'></textarea>
+    <div class="modal-footer">
+      <button class="mbtn cancel" onclick="closeModal('modal-import')">Cancel</button>
+      <button class="mbtn confirm" onclick="confirmImport()">Import</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay hidden" id="modal-ai-add">
+  <div class="modal ai-modal">
+    <button class="close-modal" onclick="closeModal('modal-ai-add')">✕</button>
+    <h2>AI Add Problem</h2>
+    <label>LeetCode problem number</label>
+    <input type="number" id="ai-prob-num" placeholder="e.g. 136" min="1"/>
+    <label>Topic</label>
+    <select id="ai-topic-sel"></select>
+    <label>Approach / Category</label>
+    <select id="ai-approach-sel"></select>
+    <div class="ai-thinking" id="ai-thinking">
+      <div class="desc-spinner"></div>
+      <span>Looking up problem on LeetCode via Gemini...</span>
+    </div>
+    <div class="ai-err" id="ai-err"></div>
+    <div class="ai-result-box" id="ai-result-box">
+      <div class="ar-name" id="ar-name"></div>
+      <div class="ar-meta">
+        <span class="dbadge" id="ar-diff"></span>
+        <span class="ar-url" id="ar-url"></span>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="mbtn cancel" onclick="closeModal('modal-ai-add')">Cancel</button>
+      <button class="mbtn confirm" id="ai-lookup-btn" onclick="aiLookupProblem()">✦ Look up</button>
+      <button class="mbtn confirm" id="ai-save-btn" onclick="aiSaveProblem()" style="display:none;background:linear-gradient(135deg,rgba(124,90,240,.2),rgba(192,132,252,.2));border-color:#a78bfa;color:#c4b5fd">Save problem</button>
+    </div>
+  </div>
+</div>
+
+<div class="shell">
+  <div class="hero">
+    <div class="eyebrow">// leetcode journey tracker</div>
+    <div class="title">All Is <em>Well</em></div>
+    <div class="tagline">where every line of code is a step forward</div>
+    <div class="hdiv"></div>
+    <span class="motto">The code you write today is the confidence you carry tomorrow</span>
+  </div>
+
+  <div class="status-bar" id="status-bar">
+    <span class="sdot" id="sdot"></span>
+    <span class="stext" id="stext">Connecting to Firebase...</span>
+  </div>
+
+  <div class="toolbar">
+    <button class="ai-add-btn" onclick="openAiAddModal()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      AI Add Problem
+    </button>
+    <button class="tbtn primary" onclick="openModal('modal-import')">⬆ Import JSON</button>
+    <button class="tbtn" onclick="exportData()">⬇ Export JSON</button>
+  </div>
+
+  <div class="tabs-wrap" id="tabs-wrap">
+    <button class="add-topic-btn" onclick="openModal('modal-topic')">+ Topic</button>
+  </div>
+
+  <div class="search-wrap">
+    <span class="sico">⌕</span>
+    <input class="search-input" id="search-input" placeholder="Search problems by name or number..." oninput="render(this.value)"/>
+  </div>
+
+  <div id="sections"></div>
+  <div class="no-res" id="no-res"></div>
+
+  <footer>
+    <p class="f-friends">Thanks for your support, my friends &nbsp;💜&nbsp; Keep solving, keep growing</p>
+    <p class="f-copy">All Is Well · Built with 💜 · Powered by Firebase · Stay consistent 🔥</p>
+  </footer>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc, deleteDoc, collection, getDocs }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const cfg = {
+  apiKey:"AIzaSyC4kVRqnvNx4g1qhnrpSk2O-FwM-FfR2xM",
+  authDomain:"alliswell-26868.firebaseapp.com",
+  projectId:"alliswell-26868",
+  storageBucket:"alliswell-26868.firebasestorage.app",
+  messagingSenderId:"834037756866",
+  appId:"1:834037756866:web:3f2180df10538c4dc65c5b"
+};
+const fbApp=initializeApp(cfg);
+const db=getFirestore(fbApp);
+
+function setStatus(state,msg){
+  const bar=document.getElementById('status-bar'),dot=document.getElementById('sdot'),txt=document.getElementById('stext');
+  bar.className='status-bar'+(state==='err'?' serr':'');
+  dot.className='sdot'+(state==='ok'?' ok':state==='err'?' err':'');
+  txt.textContent=msg;
+}
+
+window.FB={
+  async readStructure(){
+    try{ const s=await getDocs(collection(db,'structure'));const o={};s.forEach(d=>{o[d.id]=d.data();});return o; }catch(e){return {};}
+  },
+  async writeStructure(k,d){ try{await setDoc(doc(db,'structure',k),d);return true;}catch(e){console.error(e);return false;} },
+  async deleteStructure(k){ try{await deleteDoc(doc(db,'structure',k));return true;}catch(e){return false;} },
+  async readSolution(id){
+    try{ const s=await getDoc(doc(db,'solutions',id));return s.exists()?s.data():{}; }catch(e){return {};}
+  },
+  async writeSolution(id,data){
+    try{
+      const ref=doc(db,'solutions',id);
+      const s=await getDoc(ref);
+      const prev=s.exists()?s.data():{};
+      await setDoc(ref,{...prev,...data,updatedAt:Date.now()});
+      return true;
+    }catch(e){console.error(e);return false;}
+  }
+};
+
+try{
+  await window.FB.writeStructure('_ping',{t:Date.now()});
+  setStatus('ok','🔥 Firebase connected — all data saved to cloud permanently');
+}catch(e){
+  setStatus('err','⚠️ Firebase error — check Firestore rules. '+e.message);
+}
+window.__fbReady=true;
+window.dispatchEvent(new Event('fbReady'));
+</script>
+
+<script>
+// SWAPPED IN SYSTEM: Clean, developer-unrestricted Google AI Studio API key
+const primaryApiKey = 'AQ.Ab8RN6LB_uSEgx03Kd-WlMdhmThFoSC6zWYCrLLCSxZ9_wkt1Q'; 
+const fallbackApiKey = 'AIzaSyC4kVRqnvNx4g1qhnrpSk2O-FwM-FfR2xM';
+
+window.GEMINI_API_KEY = typeof __gemini_api_key !== 'undefined' && __gemini_api_key ? __gemini_api_key : primaryApiKey;
+window.GEMINI_MODEL = 'gemini-2.5-flash';
+
+/* ── Custom Toast Message System ── */
+function showToast(message, type = 'info') {
+  const container = document.getElementById('toast-container');
+  if (!container) return;
+  const toast = document.createElement('div');
+  toast.style.cssText = `
+    padding: 12px 18px;
+    border-radius: 10px;
+    font-family: var(--font);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    pointer-events: auto;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  `;
+  
+  let icon = 'ℹ️';
+  if (type === 'error') {
+    icon = '❌';
+    toast.style.borderColor = 'rgba(248, 113, 113, 0.3)';
+    toast.style.background = 'rgba(248, 113, 113, 0.1)';
+  } else if (type === 'success') {
+    icon = '✅';
+    toast.style.borderColor = 'rgba(74, 222, 128, 0.3)';
+    toast.style.background = 'rgba(74, 222, 128, 0.1)';
+  } else if (type === 'warning') {
+    icon = '⚠️';
+    toast.style.borderColor = 'rgba(251, 191, 36, 0.3)';
+    toast.style.background = 'rgba(251, 191, 36, 0.1)';
+  }
+  
+  toast.innerHTML = `<span>${icon}</span><span style="flex:1">${message}</span><button onclick="this.parentElement.remove()" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px;margin-left:8px;line-height:1">✕</button>`;
+  container.appendChild(toast);
+  setTimeout(() => { toast.style.transform = 'translateY(0)'; toast.style.opacity = '1'; }, 10);
+  setTimeout(() => { toast.style.transform = 'translateY(-20px)'; toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 4000);
+}
+
+/* ── Gemini Content Dispatcher ── */
+async function callGemini(systemPrompt, userPrompt, maxTokens=1000){
+  let key = window.GEMINI_API_KEY;
+  let url = `https://generativelanguage.googleapis.com/v1beta/models/${window.GEMINI_MODEL}:generateContent?key=${key}`;
+  const payload = {
+    contents: [{ parts: [{ text: userPrompt }] }],
+    systemInstruction: { parts: [{ text: systemPrompt }] },
+    generationConfig: { maxOutputTokens: maxTokens, temperature: 0.1 }
+  };
+
+  let retries = 2;
+  for (let i = 0; i < retries; i++) {
+    try {
+      const resp = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      const data = await resp.json();
+      
+      if (data.error) {
+         throw new Error(`[Google API Error ${data.error.code || 'HTTP'}]: ${data.error.message}`);
+      }
+      return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    } catch (e) {
+      if (i === 0) {
+         console.warn("Retrying query through fallback authorization parameters...");
+         key = fallbackApiKey;
+         url = `https://generativelanguage.googleapis.com/v1beta/models/${window.GEMINI_MODEL}:generateContent?key=${key}`;
+         continue;
+      }
+      throw e; 
+    }
+  }
+}
+
+/* ── Robust Regex JSON Extractor Layer ── */
+function extractRawJSON(text) {
+  const firstBrace = text.indexOf('{');
+  const lastBrace = text.lastIndexOf('}');
+  if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+    return text.substring(firstBrace, lastBrace + 1);
+  }
+  throw new Error("API returned raw conversational data instead of an expected JSON object map structure.");
+}
+
+/* ════════════════ STATE ════════════════ */
+let topics={}, approaches={}, problems={}, solutions={};
+let activeTopic=null, pendingApproachTopic=null;
+let aiProblemData=null;
+const DEFAULT_COLORS=['#818cf8','#34d399','#fbbf24','#f472b6','#60a5fa','#fb923c','#f87171','#a78bfa','#94a3b8','#86efac'];
+let colorIdx=0;
+const descCache={};
+
+let lpSelectedProbId = null;
+let lpSelectedApId = null;
+let lpTimer = null;
+
+const STATUS_OPTIONS=[
+  {val:'',label:'— Status —',cls:''},
+  {val:'solved',label:'✅ Solved',cls:'st-solved'},
+  {val:'improve',label:'📈 Need to improve',cls:'st-improve'},
+  {val:'weak',label:'❌ Not up to mark',cls:'st-weak'},
+  {val:'skip',label:'⏭ Skipped',cls:'st-skip'},
+];
+function statusClass(val){return STATUS_OPTIONS.find(o=>o.val===val)?.cls||'';}
+
+/* ════════════════ INIT ════════════════ */
+window.addEventListener('fbReady',async()=>{
+  await loadAll();
+  if(!Object.keys(topics).length) {
+     await seedDefaultData();
+  } else {
+     for (let pid of Object.keys(problems)) {
+        window.FB.readSolution(pid).then(data => {
+           if (data) {
+              solutions[pid] = data;
+              const row = document.getElementById(`prob-${pid}`);
+              if (row && data.status) {
+                 row.className = `prob ${statusClass(data.status)}`;
+                 render(); 
+              }
+           }
+        });
+     }
+  }
+  buildTabs();
+  render();
+});
+
+async function loadAll(){
+  const struct=await window.FB.readStructure();
+  topics={}; approaches={}; problems={};
+  Object.entries(struct).forEach(([k,v])=>{
+    if(k==='_ping') return;
+    if(v._type==='topic')    topics[k]=v;
+    if(v._type==='approach') approaches[k]=v;
+    if(v._type==='problem')  problems[k]=v;
+  });
+}
+
+async function seedDefaultData(){
+  const seed=[
+    {tid:'array',approachId:'xor',aname:'XOR / Bit manipulation',color:'#818cf8',probs:[
+      {num:136,name:'Single Number',diff:'Easy',url:'https://leetcode.com/problems/single-number/'},
+      {num:476,name:'Number Complement',diff:'Easy',url:'https://leetcode.com/problems/number-complement/'}
+    ]}
+  ];
+  topics['array']={_type:'topic',name:'Array',order:0};
+  await window.FB.writeStructure('array',topics['array']);
+  for(let s of seed) {
+    approaches[s.approachId]={_type:'approach',name:s.aname,color:s.color,topicId:s.tid,order:0};
+    await window.FB.writeStructure(s.approachId,approaches[s.approachId]);
+    for(let p of s.probs) {
+      const pid=`${s.approachId}_${p.num}`;
+      problems[pid]={_type:'problem',num:p.num,name:p.name,diff:p.diff,url:p.url,approachId:s.approachId,topicId:s.tid};
+      await window.FB.writeStructure(pid,problems[pid]);
+    }
+  }
+}
+
+/* ════════════════ LONG PRESS CONTROLLER ════════════════ */
+function handleLongPressStart(e, type, targetId) {
+  if(lpTimer) clearTimeout(lpTimer);
+  lpTimer = setTimeout(() => {
+     if(type === 'problem') {
+        openProblemLpMenu(targetId);
+     } else if(type === 'approach') {
+        openApproachLpMenu(targetId);
+     }
+  }, 750);
+}
+
+function handleLongPressEnd() {
+  if(lpTimer) clearTimeout(lpTimer);
+}
+
+function openProblemLpMenu(pid) {
+  lpSelectedProbId = pid;
+  const p = problems[pid];
+  if(!p) return;
+  document.getElementById('lp-prob-title').textContent = `#${p.num} - ${p.name}`;
+  openModal('modal-lp-prob');
+}
+
+function openApproachLpMenu(aid) {
+  lpSelectedApId = aid;
+  const ap = approaches[aid];
+  if(!ap) return;
+  document.getElementById('lp-ap-name').value = ap.name;
+  document.getElementById('lp-ap-color').value = ap.color;
+  openModal('modal-lp-approach');
+}
+
+async function triggerLpStatus(statusVal) {
+  const pid = lpSelectedProbId;
+  if(!pid) return;
+  if(!solutions[pid]) solutions[pid] = {};
+  solutions[pid].status = statusVal;
+  await window.FB.writeSolution(pid, {status: statusVal});
+  closeModal('modal-lp-prob');
+  render(document.getElementById('search-input').value);
+  showToast('Status Updated Successfully!', 'success');
+}
+
+async function triggerLpDeleteProb() {
+  const pid = lpSelectedProbId;
+  if(!pid) return;
+  delete problems[pid];
+  await window.FB.deleteStructure(pid);
+  closeModal('modal-lp-prob');
+  buildTabs();
+  render(document.getElementById('search-input').value);
+  showToast('Problem removed.', 'info');
+}
+
+async function triggerLpSaveAp() {
+  const aid = lpSelectedApId;
+  if(!aid) return;
+  const name = document.getElementById('lp-ap-name').value.trim();
+  const color = document.getElementById('lp-ap-color').value;
+  if(!name) return;
+  approaches[aid].name = name;
+  approaches[aid].color = color;
+  await window.FB.writeStructure(aid, approaches[aid]);
+  closeModal('modal-lp-approach');
+  render(document.getElementById('search-input').value);
+  showToast('Approach options saved!', 'success');
+}
+
+async function triggerLpDeleteAp() {
+  const aid = lpSelectedApId;
+  if(!aid) return;
+  const del=Object.keys(problems).filter(pid=>problems[pid].approachId===aid);
+  await Promise.all(del.map(pid=>{delete problems[pid];return window.FB.deleteStructure(pid);}));
+  delete approaches[aid];
+  await window.FB.deleteStructure(aid);
+  closeModal('modal-lp-approach');
+  buildTabs(); render();
+  showToast('Approach structurally removed.', 'info');
+}
+
+/* ── TABS ── */
+function buildTabs(){
+  const wrap=document.getElementById('tabs-wrap');
+  const addBtn=wrap.querySelector('.add-topic-btn');
+  wrap.innerHTML='';
+  const sorted=Object.entries(topics).sort((a,b)=>(a[1].order||0)-(b[1].order||0));
+  if(!activeTopic&&sorted.length) activeTopic=sorted[0][0];
+  sorted.forEach(([tid,t]) => {
+    const cnt=Object.values(problems).filter(p=>p.topicId===tid).length;
+    const btn=document.createElement('button');
+    btn.className='tab'+(tid===activeTopic?' active':'');
+    btn.innerHTML=`${t.name} <span class="tab-pill">${cnt}</span>`;
+    btn.onclick=()=>{activeTopic=tid;buildTabs();document.getElementById('search-input').value='';render();};
+    wrap.appendChild(btn);
+  });
+  wrap.appendChild(addBtn);
+}
+
+/* ── RENDER ── */
+function render(q=''){
+  const cont=document.getElementById('sections');
+  const noRes=document.getElementById('no-res');
+  cont.innerHTML=''; noRes.style.display='none';
+  if(!activeTopic){noRes.style.display='block';noRes.textContent='Add a topic to get started.';return;}
+  const topicAps=Object.entries(approaches).filter(([,a])=>a.topicId===activeTopic).sort((a,b)=>(a[1].order||0)-(b[1].order||0));
+  const qn=q.trim().toLowerCase();
+  let visible=0;
+  
+  topicAps.forEach(([aid,ap])=>{
+    const apProbs=Object.entries(problems).filter(([,p])=>p.approachId===aid).sort((a,b)=>a[1].num-b[1].num);
+    const filtered=qn?apProbs.filter(([,p])=>p.name.toLowerCase().includes(qn)||String(p.num).includes(qn)):apProbs;
+    visible+=filtered.length;
+    let e=0,m=0,h=0;
+    filtered.forEach(([,p])=>{if(p.diff==='Easy')e++;else if(p.diff==='Medium')m++;else h++;});
+    const pills=[e?`<span class="dp de">${e}E</span>`:'',m?`<span class="dp dm">${m}M</span>`:'',h?`<span class="dp dh">${h}H</span>`:''].join('');
+    const el=document.createElement('div');
+    el.className='approach'; el.id='ap-'+aid;
+    el.innerHTML=`
+<div class="ah" onclick="toggleAp('${aid}')" 
+     onmousedown="handleLongPressStart(event, 'approach', '${aid}')" onmouseup="handleLongPressEnd()" onmouseleave="handleLongPressEnd()"
+     ontouchstart="handleLongPressStart(event, 'approach', '${aid}')" ontouchend="handleLongPressEnd()">
+  <div class="ah-l">
+    <div class="ah-bar" style="background:${ap.color}"></div>
+    <span class="ah-name" title="Long press to manage approach">${ap.name}</span>
+    <span class="ah-cnt">${filtered.length}</span>
+  </div>
+  <div class="ah-r">
+    <div class="dpills">${pills}</div>
+    <button class="icon-btn" title="Add problem" onclick="event.stopPropagation();showAddProbRow('${aid}')" style="font-size:15px">＋</button>
+    <span class="chev ${qn?'open':''}" id="chev-${aid}">▾</span>
+  </div>
+</div>
+<div class="plist ${qn?'open':''}" id="plist-${aid}">
+  ${filtered.map(([pid,p])=>probHTML(pid,p)).join('')}
+  <div class="add-prob-row" id="add-row-${aid}" style="display:none">
+    <div class="add-form">
+      <input class="inp-num" type="number" id="ainp-num-${aid}" placeholder="#"/>
+      <input class="inp-name" type="text" id="ainp-name-${aid}" placeholder="Problem name"/>
+      <select id="ainp-diff-${aid}"><option value="Easy">Easy</option><option value="Medium">Medium</option><option value="Hard">Hard</option></select>
+      <input class="inp-url" type="text" id="ainp-url-${aid}" placeholder="LeetCode URL"/>
+      <button class="go-btn" onclick="addProblem('${aid}')">Add</button>
+    </div>
+  </div>
+</div>`;
+    cont.appendChild(el);
+  });
+  const addApBtn=document.createElement('div');
+  addApBtn.style.cssText='margin-top:10px;display:flex;gap:8px;align-items:center';
+  addApBtn.innerHTML=`<button class="tbtn" onclick="openAddApproach('${activeTopic}')">＋ Add approach to this topic</button>`;
+  cont.appendChild(addApBtn);
+  if(!visible&&qn){noRes.style.display='block';noRes.textContent='No problems match your search.';}
+}
+
+function probHTML(pid,p){
+  const sol=solutions[pid]||{};
+  const hc=!!(sol.code&&sol.code.trim());
+  const hn=!!(sol.note&&sol.note.trim());
+  const rev=sol.revisions||0;
+  const st=sol.status||'';
+  const stCls=statusClass(st);
+  
+  let labelText = '';
+  if(st === 'solved') labelText = '<span class="lp-status-badge lps-solved">Solved</span>';
+  if(st === 'improve') labelText = '<span class="lp-status-badge lps-improve">Needs Work</span>';
+  if(st === 'weak') labelText = '<span class="lp-status-badge lps-weak">Weak</span>';
+  if(st === 'skip') labelText = '<span class="lp-status-badge lps-skip">Skipped</span>';
+
+  return `
+<div class="prob ${stCls}" id="prob-${pid}" 
+     onmousedown="handleLongPressStart(event, 'problem', '${pid}')" onmouseup="handleLongPressEnd()" onmouseleave="handleLongPressEnd()"
+     ontouchstart="handleLongPressStart(event, 'problem', '${pid}')" ontouchend="handleLongPressEnd()">
+  <div class="prob-main" onclick="toggleDesc('${pid}')">
+    <span class="prob-num">#${p.num}</span>
+    <div class="prob-body">
+      <div class="prob-name">
+        <span class="prob-name-text" title="Long press to change status or delete">${p.name}</span>
+        <span class="dbadge d${p.diff[0]}">${p.diff}</span>
+        <span class="dot dotc" id="dotc-${pid}" style="display:${hc?'inline-block':'none'}"></span>
+        <span class="dot dotn" id="dotn-${pid}" style="display:${hn?'inline-block':'none'}"></span>
+        ${labelText}
+      </div>
+      <a class="prob-link" href="${p.url}" target="_blank" onclick="event.stopPropagation()">↗ leetcode.com</a>
+    </div>
+    <div class="prob-actions" onclick="event.stopPropagation()">
+      <button class="abtn ${hc?'has-code':''}" id="cbtn-${pid}" onclick="openPanel('code','${pid}')">⌥ Code</button>
+      <button class="abtn ${hn?'has-note':''}" id="nbtn-${pid}" onclick="openPanel('note','${pid}')">✎ Notes</button>
+      <div class="rev-wrap" title="Edit or click + to bump">
+        <span class="rev-label">🔁</span>
+        <input class="rev-input" type="number" id="rev-${pid}" value="${rev}" min="0"
+          onchange="setRevision('${pid}',this.value)" onkeydown="if(event.key==='Enter')this.blur()"/>
+        <button class="rev-inc" onclick="bumpRevision('${pid}')">+</button>
+      </div>
+    </div>
+  </div>
+  <div class="desc-panel" id="dp-${pid}"></div>
+  <div class="panel" id="cp-${pid}">
+    <div class="plbl">// your solution</div>
+    <textarea id="cta-${pid}" placeholder="Paste your code here...">${esc(sol.code||'')}</textarea>
+    <div class="pfooter">
+      <button class="save-btn" onclick="savePanel('code','${pid}')">Save to Firebase ☁</button>
+      <span class="flash-saving" id="csaving-${pid}">Saving...</span>
+      <span class="flash-saved" id="csaved-${pid}">Saved ✓</span>
+    </div>
+  </div>
+  <div class="panel note-panel" id="np-${pid}">
+    <div class="plbl">// notes & observations</div>
+    <textarea id="nta-${pid}" placeholder="Approach, edge cases, time complexity...">${esc(sol.note||'')}</textarea>
+    <div class="pfooter">
+      <button class="save-btn" onclick="savePanel('note','${pid}')">Save to Firebase ☁</button>
+      <span class="flash-saving" id="nsaving-${pid}">Saving...</span>
+      <span class="flash-saved" id="nsaved-${pid}">Saved ✓</span>
+    </div>
+  </div>
+</div>`;
+}
+
+/* ════════════════ DESCRIPTION ENGINE ════════════════ */
+async function toggleDesc(pid){
+  const panel=document.getElementById('dp-'+pid);
+  if(!panel) return;
+  document.getElementById('cp-'+pid)?.classList.remove('open');
+  document.getElementById('np-'+pid)?.classList.remove('open');
+
+  if(panel.classList.contains('open')){
+    panel.classList.remove('open'); panel.innerHTML=''; return;
+  }
+  panel.classList.add('open');
+  if(descCache[pid]){renderDesc(pid,descCache[pid]);return;}
+
+  panel.innerHTML=`<div class="desc-loading"><div class="desc-spinner"></div><span>Fetching problem description via Gemini...</span></div>`;
+  const p=problems[pid];
+  if(!p){panel.innerHTML='<div class="desc-err">Problem specifications not identified.</div>';return;}
+
+  try{
+    const text=await callGemini(
+      'You are a plain text JSON compiler. You must output a clean string block starting with { and ending with } containing the template rules. No markdown tags.',
+      `Compile problem spec properties for LeetCode dynamic layout requirement index #${p.num} titled "${p.name}". Respond ONLY within this template schema structure:
+{
+  "description": "2-3 target short summary explanation sentences detailing operational criteria rules",
+  "examples": [
+    {"input": "Example context string", "output": "Expected value matched target string", "explanation": "Logic tracking step overview reason context"}
+  ],
+  "constraints": ["Constraint criteria parameter sweep boundary limits 1"],
+  "hint": "Primary strategic shortcut mechanical strategy step hint"
+}`
+    );
+    
+    const cleaned = extractRawJSON(text);
+    const parsed = JSON.parse(cleaned);
+    descCache[pid] = parsed;
+    renderDesc(pid, parsed);
+  }catch(e){
+    console.error("Exception Caught during dynamic description resolution:", e);
+    panel.innerHTML=`<div class="desc-err"><strong>System Error:</strong> ${esc(e.message)}<br/><br/><a href="${p.url}" target="_blank" style="color:var(--text)">Open fallback layout link on LeetCode ↗</a></div>`;
+  }
+}
+window.toggleDesc=toggleDesc;
+
+function renderDesc(pid,d){
+  const panel=document.getElementById('dp-'+pid); const p=problems[pid];
+  if(!panel||!p) return;
+
+  const allExHTML=d.examples?.map((ex,i)=>`
+    <div class="io-block" style="margin-bottom:8px">
+      <div class="io-header"><span class="io-tag" style="background:rgba(103,232,249,.1);color:var(--blue)">Input</span></div>
+      <div class="io-body">${esc(String(ex.input||''))}</div>
+      <div class="io-header" style="border-top:1px solid var(--border)"><span class="io-tag" style="background:rgba(110,231,183,.1);color:var(--green)">Output</span></div>
+      <div class="io-body">${esc(String(ex.output||''))}</div>
+      ${ex.explanation?`<div class="io-explain">${esc(ex.explanation)}</div>`:''}
+    </div>`).join('')||'';
+
+  const constraintsHTML=d.constraints?.map(c=>`<li>${esc(c)}</li>`).join('')||'';
+
+  panel.innerHTML=`
+<div class="desc-content">
+  <div class="desc-title-row">
+    <span class="desc-prob-num">#${p.num}</span><span class="desc-prob-title">${p.name}</span>
+    <span class="dbadge d${p.diff[0]}">${p.diff}</span>
+  </div>
+  <div class="desc-section">
+    <div class="desc-section-lbl">Description</div>
+    <div class="desc-text"><p>${esc(d.description||'')}</p></div>
+  </div>
+  ${d.hint?`<div class="desc-section"><div class="desc-section-lbl">💡 Key insight</div><div class="desc-text" style="color:var(--accent2);font-weight:600">${esc(d.hint)}</div></div>`:''}
+  <div class="desc-section">
+    <div class="desc-section-lbl">Examples</div>
+    <div class="io-blocks">${allExHTML}</div>
+  </div>
+  ${constraintsHTML?`<div class="desc-section"><div class="desc-section-lbl">Constraints</div><ul class="desc-constraints">${constraintsHTML}</ul></div>`:''}
+  <div class="desc-actions-row"><a class="desc-link-btn" href="${p.url}" target="_blank">Open on LeetCode ↗</a></div>
+</div>`;
+
+  const blocks=panel.querySelectorAll('.io-block');
+  blocks.forEach((b,i)=>{ setTimeout(()=>b.classList.add('visible'),i*120+80); });
+}
+
+/* ── TOGGLE APPROACH ── */
+function toggleAp(aid){
+  document.getElementById('plist-'+aid)?.classList.toggle('open');
+  document.getElementById('chev-'+aid)?.classList.toggle('open');
+}
+window.toggleAp=toggleAp;
+
+/* ── PANELS ── */
+async function openPanel(type,pid){
+  const cp=document.getElementById('cp-'+pid);
+  const np=document.getElementById('np-'+pid);
+  const dp=document.getElementById('dp-'+pid);
+  const target=type==='code'?cp:np; const other=type==='code'?np:cp;
+  const wasOpen=target.classList.contains('open');
+  other.classList.remove('open'); dp?.classList.remove('open');
+  if(wasOpen){target.classList.remove('open');return;}
+  if(!solutions[pid]){
+    const data=await window.FB.readSolution(pid); solutions[pid]=data;
+  }
+  document.getElementById('cta-'+pid).value=solutions[pid].code||'';
+  document.getElementById('nta-'+pid).value=solutions[pid].note||'';
+  target.classList.add('open');
+  const ta=document.getElementById((type==='code'?'cta':'nta')+'-'+pid);
+  if(ta) setTimeout(()=>ta.focus(),50);
+}
+window.openPanel=openPanel;
+
+async function savePanel(type,pid){
+  const ta=document.getElementById((type==='code'?'cta':'nta')+'-'+pid);
+  const saving=document.getElementById((type==='code'?'csaving':'nsaving')+'-'+pid);
+  const saved=document.getElementById((type==='code'?'csaved':'nsaved')+'-'+pid);
+  if(!ta) return; saving.style.display='inline';
+  const ok=await window.FB.writeSolution(pid,{[type]:ta.value});
+  saving.style.display='none';
+  if(ok){
+    if(!solutions[pid]) solutions[pid]={}; solutions[pid][type]=ta.value;
+    updateDots(pid); updateBtnStyle(pid);
+    saved.classList.add('show'); setTimeout(()=>saved.classList.remove('show'),2500);
+  }
+}
+window.savePanel=savePanel;
+
+function updateDots(pid){
+  const sol=solutions[pid]||{}; const c=document.getElementById('dotc-'+pid); const n=document.getElementById('dotn-'+pid);
+  if(c) c.style.display=(sol.code&&sol.code.trim())?'inline-block':'none';
+  if(n) n.style.display=(sol.note&&sol.note.trim())?'inline-block':'none';
+}
+function updateBtnStyle(pid){
+  const sol=solutions[pid]||{}; const cb=document.getElementById('cbtn-'+pid); const nb=document.getElementById('nbtn-'+pid);
+  if(cb) cb.className='abtn '+((sol.code&&sol.code.trim())?'has-code':'');
+  if(nb) nb.className='abtn '+((sol.note&&sol.note.trim())?'has-note':'');
+}
+
+/* ── REVISION ── */
+async function bumpRevision(pid){
+  if(!solutions[pid]) solutions[pid]=await window.FB.readSolution(pid);
+  const cur=(solutions[pid].revisions||0)+1; solutions[pid].revisions=cur;
+  const inp=document.getElementById('rev-'+pid);
+  if(inp){inp.value=cur;inp.style.color='#4ade80';setTimeout(()=>inp.style.color='',600);}
+  await window.FB.writeSolution(pid,{revisions:cur});
+}
+window.bumpRevision=bumpRevision;
+
+async function setRevision(pid,val){
+  const num=Math.max(0,parseInt(val)||0);
+  if(!solutions[pid]) solutions[pid]=await window.FB.readSolution(pid);
+  solutions[pid].revisions=num;
+  await window.FB.writeSolution(pid,{revisions:num});
+}
+window.setRevision=setRevision;
+
+/* ── AI ADD PROBLEM ── */
+function openAiAddModal(){
+  aiProblemData=null; document.getElementById('ai-prob-num').value='';
+  document.getElementById('ai-result-box').classList.remove('show');
+  document.getElementById('ai-thinking').classList.remove('show');
+  document.getElementById('ai-err').classList.remove('show');
+  document.getElementById('ai-lookup-btn').style.display='';
+  document.getElementById('ai-save-btn').style.display='none';
+
+  const tSel=document.getElementById('ai-topic-sel'); tSel.innerHTML='';
+  Object.entries(topics).sort((a,b)=>(a[1].order||0)-(b[1].order||0)).forEach(([tid,t]) => {
+    const o=document.createElement('option'); o.value=tid; o.textContent=t.name; tSel.appendChild(o);
+  });
+  populateAiApproaches(); tSel.onchange=populateAiApproaches;
+  openModal('modal-ai-add');
+}
+window.openAiAddModal=openAiAddModal;
+
+function populateAiApproaches(){
+  const tid=document.getElementById('ai-topic-sel').value; const aSel=document.getElementById('ai-approach-sel'); aSel.innerHTML='';
+  Object.entries(approaches).filter(([,a])=>a.topicId===tid).sort((a,b)=>(a[1].order||0)-(b[1].order||0)).forEach(([aid,a])=>{
+    const o=document.createElement('option'); o.value=aid; o.textContent=a.name; aSel.appendChild(o);
+  });
+}
+
+async function aiLookupProblem(){
+  const num=parseInt(document.getElementById('ai-prob-num').value||'0');
+  if(!num){ showToast('Enter a problem number!', 'warning'); return; }
+  document.getElementById('ai-err').classList.remove('show');
+  document.getElementById('ai-result-box').classList.remove('show');
+  document.getElementById('ai-thinking').classList.add('show');
+  document.getElementById('ai-lookup-btn').style.display='none';
+
+  try{
+    const text=await callGemini(
+      'You are a strict data formatter. Output exactly a raw JSON scheme matching the requested layout parameters. No conversational text.',
+      `Identify metadata metrics configurations for problem item row value ${num}. Return strictly inside a structural JSON key layout tracking these properties exactly: {"num":${num},"name":"exact clean problem text name","diff":"Easy|Medium|Hard","url":"https://leetcode.com/problems/slug-string/"}`
+    );
+    
+    const parsedText = extractRawJSON(text);
+    const parsed = JSON.parse(parsedText);
+    aiProblemData = parsed;
+
+    document.getElementById('ar-name').textContent=parsed.name;
+    const diffEl=document.getElementById('ar-diff'); diffEl.textContent=parsed.diff;
+    diffEl.className='dbadge d'+(parsed.diff||'M')[0];
+    document.getElementById('ar-url').textContent=parsed.url;
+    document.getElementById('ai-result-box').classList.add('show');
+    document.getElementById('ai-save-btn').style.display='';
+  }catch(e){
+    document.getElementById('ai-err').innerHTML=`<strong>Lookup Error Trace:</strong><br/>${esc(e.message)}`;
+    document.getElementById('ai-err').classList.add('show'); document.getElementById('ai-lookup-btn').style.display='';
+  }finally{
+    document.getElementById('ai-thinking').classList.remove('show');
+  }
+}
+window.aiLookupProblem=aiLookupProblem;
+
+async function aiSaveProblem(){
+  if(!aiProblemData) return;
+  const aid=document.getElementById('ai-approach-sel').value; const ap=approaches[aid];
+  if(!ap){ showToast('Select an approach first', 'warning'); return; }
+  const pid=`${aid}_${aiProblemData.num}`;
+  if(problems[pid]){ showToast('Problem already allocated in index mapping rules!', 'error'); return; }
+  
+  const prob={_type:'problem',num:aiProblemData.num,name:aiProblemData.name,diff:aiProblemData.diff,url:aiProblemData.url,approachId:aid,topicId:ap.topicId};
+  problems[pid]=prob;
+  await window.FB.writeStructure(pid,prob);
+  closeModal('modal-ai-add');
+  buildTabs(); render(document.getElementById('search-input').value);
+  showToast('Problem mapped successfully!', 'success');
+}
+window.aiSaveProblem=aiSaveProblem;
+
+/* ── ADD PROBLEM (manual) ── */
+function showAddProbRow(aid){
+  const row=document.getElementById('add-row-'+aid); if(!row) return;
+  const vis=row.style.display!=='none'; row.style.display=vis?'none':'block';
+  if(!vis){
+    document.getElementById('plist-'+aid)?.classList.add('open');
+    document.getElementById('chev-'+aid)?.classList.add('open');
+    document.getElementById('ainp-num-'+aid)?.focus();
+  }
+}
+window.showAddProbRow=showAddProbRow;
+
+async function addProblem(aid){
+  const num=parseInt(document.getElementById('ainp-num-'+aid)?.value||'0');
+  const name=(document.getElementById('ainp-name-'+aid)?.value||'').trim();
+  const diff=document.getElementById('ainp-diff-'+aid)?.value||'Easy';
+  const url=(document.getElementById('ainp-url-'+aid)?.value||'').trim();
+  if(!num||!name){ showToast('Problem fields incomplete!', 'warning'); return; }
+  const pid=`${aid}_${num}`;
+  if(problems[pid]){ showToast('Problem structure conflicts with existing reference!', 'error'); return; }
+  const ap=approaches[aid];
+  const prob={_type:'problem',num,name,diff,url:url||`https://leetcode.com/problems/${name.toLowerCase().replace(/\s+/g,'-')}/`,approachId:aid,topicId:ap.topicId};
+  problems[pid]=prob;
+  await window.FB.writeStructure(pid,prob);
+  document.getElementById('add-row-'+aid).style.display='none';
+  buildTabs(); render(document.getElementById('search-input').value);
+  showToast('Problem created successfully!', 'success');
+}
+window.addProblem=addProblem;
+
+/* ── ADD APPROACH / TOPIC ── */
+function openAddApproach(tid){
+  pendingApproachTopic=tid; document.getElementById('new-approach-name').value='';
+  document.getElementById('new-approach-color').value=DEFAULT_COLORS[colorIdx%DEFAULT_COLORS.length];
+  openModal('modal-approach');
+}
+window.openAddApproach=openAddApproach;
+
+async function confirmAddApproach(){
+  const name=document.getElementById('new-approach-name').value.trim();
+  const color=document.getElementById('new-approach-color').value;
+  if(!name){ showToast('Enter an approach name', 'warning'); return; }
+  const aid='ap_'+Date.now();
+  approaches[aid]={_type:'approach',name,color,topicId:pendingApproachTopic,order:Object.keys(approaches).length};
+  colorIdx++; await window.FB.writeStructure(aid,approaches[aid]);
+  closeModal('modal-approach'); render();
+  showToast('Approach added systematically!', 'success');
+}
+window.confirmAddApproach=confirmAddApproach;
+
+async function confirmAddTopic(){
+  const name=document.getElementById('new-topic-name').value.trim();
+  if(!name){ showToast('Enter a topic name', 'warning'); return; }
+  const tid=name.toLowerCase().replace(/\s+/g,'_')+'_'+Date.now();
+  topics[tid]={_type:'topic',name,order:Object.keys(topics).length}; activeTopic=tid;
+  await window.FB.writeStructure(tid,topics[tid]);
+  closeModal('modal-topic'); buildTabs(); render();
+  showToast('Topic created successfully!', 'success');
+}
+window.confirmAddTopic=confirmAddTopic;
+
+/* ── IMPORT / EXPORT ── */
+async function confirmImport(){
+  const raw=document.getElementById('import-json').value.trim();
+  let data; try{ data=JSON.parse(raw); }catch(e){ showToast('Invalid JSON syntax: ' + e.message, 'error'); return; }
+  const writes=[];
+  data.forEach(entry=>{
+    const tid=(entry.topic||'imported').toLowerCase().replace(/\s+/g,'_');
+    if(!topics[tid]){topics[tid]={_type:'topic',name:entry.topic||'Imported',order:Object.keys(topics).length};writes.push(window.FB.writeStructure(tid,topics[tid]));}
+    const aid='ap_'+entry.approach.replace(/\s+/g,'_').toLowerCase()+'_'+tid;
+    if(!approaches[aid]){approaches[aid]={_type:'approach',name:entry.approach,color:entry.color||'#9f87ff',topicId:tid,order:Object.keys(approaches).length};writes.push(window.FB.writeStructure(aid,approaches[aid]));}
+    (entry.problems||[]).forEach(p=>{
+      const pid=`${aid}_${p.num}`;
+      if(!problems[pid]){problems[pid]={_type:'problem',num:p.num,name:p.name,diff:p.diff||'Medium',url:p.url||'',approachId:aid,topicId:tid};writes.push(window.FB.writeStructure(pid,problems[pid]));}
+    });
+  });
+  await Promise.all(writes); closeModal('modal-import'); buildTabs(); render();
+  showToast('Layout batch complete!', 'success');
+}
+window.confirmImport=confirmImport;
+
+function exportData(){
+  const out=[];
+  Object.entries(approaches).forEach(([aid,ap])=>{
+    const topic=topics[ap.topicId];
+    const probs=Object.values(problems).filter(p=>p.approachId===aid).map(p=>({num:p.num,name:p.name,diff:p.diff,url:p.url}));
+    out.push({topic:topic?.name||ap.topicId,approach:ap.name,color:ap.color,problems:probs});
+  });
+  const blob=new Blob([JSON.stringify(out,null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='all-is-well-data.json'; a.click();
+}
+window.exportData=exportData;
+
+/* ── MODALS ── */
+function openModal(id){document.getElementById(id).classList.remove('hidden');}
+function closeModal(id){document.getElementById(id).classList.add('hidden');}
+window.openModal=openModal; window.closeModal=closeModal;
+document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.add('hidden');}));
+
+/* ── UTIL ── */
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+</script>
+</body>
+</html>
